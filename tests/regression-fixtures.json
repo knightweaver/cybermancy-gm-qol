@@ -1,0 +1,1278 @@
+{
+  "opportunities": [
+    {
+      "name": "success-hope",
+      "duality": 1,
+      "success": true,
+      "critical": false,
+      "qualifies": false
+    },
+    {
+      "name": "success-fear",
+      "duality": -1,
+      "success": true,
+      "critical": false,
+      "qualifies": true,
+      "weight": "minor"
+    },
+    {
+      "name": "failure-hope",
+      "duality": 1,
+      "success": false,
+      "critical": false,
+      "qualifies": true,
+      "weight": "minor"
+    },
+    {
+      "name": "failure-fear",
+      "duality": -1,
+      "success": false,
+      "critical": false,
+      "qualifies": true,
+      "weight": "major"
+    },
+    {
+      "name": "critical",
+      "duality": 0,
+      "success": true,
+      "critical": true,
+      "qualifies": false
+    },
+    {
+      "name": "no-result-no-target",
+      "evidence": false,
+      "qualifies": false,
+      "reasonPrefix": "NO RESULT",
+      "uiNotice": "NO RESULT",
+      "createsOpportunity": false,
+      "changesFear": false,
+      "changesSpotlight": false
+    },
+    {
+      "name": "reaction",
+      "reaction": true,
+      "qualifies": false
+    },
+    {
+      "name": "adversary-source",
+      "pcSide": false,
+      "qualifies": false
+    },
+    {
+      "name": "reroll-same-source",
+      "reroll": true,
+      "sameSource": true,
+      "observedCountDelta": 0
+    }
+  ],
+  "environment": [
+    {
+      "name": "explicit-link",
+      "expected": "LINKED"
+    },
+    {
+      "name": "token-only",
+      "expected": "TOKEN-DETECTED"
+    },
+    {
+      "name": "linked-plus-token-dedup",
+      "expectedCount": 1
+    },
+    {
+      "name": "broken-link-preserved",
+      "expected": "UNRESOLVED ENVIRONMENT"
+    },
+    {
+      "name": "card-default-collapsed",
+      "expanded": false
+    }
+  ],
+  "grants": [
+    {
+      "name": "grant-use-no-move-fear",
+      "moveFear": 0
+    },
+    {
+      "name": "grant-use-no-double-turn",
+      "turnDeltaOnUse": 0
+    },
+    {
+      "name": "used-grant-single-use",
+      "statusAfterUse": "used"
+    }
+  ],
+  "fear": [
+    {
+      "name": "roll-detector-no-fear-write",
+      "detectorWritesFear": false
+    },
+    {
+      "name": "interrupt-cost",
+      "fearCost": 1
+    },
+    {
+      "name": "additional-move-cost",
+      "fearCost": 1
+    }
+  ],
+  "scene": [
+    {
+      "name": "pending-opportunity-persisted",
+      "schema": 10
+    },
+    {
+      "name": "environment-links-separate-from-combat-state",
+      "separate": true
+    },
+    {
+      "name": "pending-roll-notice-persisted",
+      "schema": 11,
+      "createsOpportunity": false
+    },
+    {
+      "name": "environment-action-ledger-schema",
+      "schema": 12,
+      "transactionType": "environment-action"
+    },
+    {
+      "name": "reaction-ledger-schema",
+      "schema": 13,
+      "separateFromGmMoveLedger": true
+    },
+    {
+      "name": "condition-clear-ledger-schema",
+      "schema": 14,
+      "actionSubtype": "clear-condition"
+    }
+  ],
+  "environmentActions": [
+    {
+      "name": "natural-base-environment-action",
+      "moveFearCost": 0,
+      "gmMoveDelta": 1,
+      "adversarySpotlightDelta": 0
+    },
+    {
+      "name": "additional-environment-action",
+      "moveFearCost": 1,
+      "gmMoveDelta": 1,
+      "adversarySpotlightDelta": 0
+    },
+    {
+      "name": "prepared-environment-action",
+      "additionalMoveFearAtUse": 0,
+      "gmMoveDeltaAtUse": 0,
+      "adversarySpotlightDelta": 0
+    },
+    {
+      "name": "interrupt-prepared-environment-action",
+      "interruptFear": 1,
+      "additionalMoveFearAtUse": 0,
+      "adversarySpotlightDelta": 0
+    },
+    {
+      "name": "linked-environment-no-token",
+      "tokenRequired": false
+    },
+    {
+      "name": "token-detected-environment",
+      "explicitLinkRequired": false
+    },
+    {
+      "name": "native-feature-cost-owned-by-daggerheart",
+      "inspectorOwnsFeatureFear": false
+    },
+    {
+      "name": "bookkeeping-only-feature-fear",
+      "inspectorOwnsStructuredFeatureFear": true
+    },
+    {
+      "name": "environment-undo",
+      "refundsInspectorFearOnly": true,
+      "adversarySpotlightDelta": 0
+    },
+    {
+      "name": "environment-card-collapse-retained",
+      "collapsible": true
+    }
+  ],
+  "reactions": [
+    {
+      "name": "adversary-native-reaction-during-pc-spotlight",
+      "gmMoveDelta": 0,
+      "spotlightOwnerChanged": false,
+      "adversarySpotlightDelta": 0
+    },
+    {
+      "name": "adversary-reaction-during-gm-spotlight",
+      "gmMoveDelta": 0,
+      "preparedMovePreserved": true
+    },
+    {
+      "name": "environment-native-reaction",
+      "gmMoveDelta": 0,
+      "adversarySpotlightDelta": 0
+    },
+    {
+      "name": "native-reaction-fear",
+      "inspectorOwnsFeatureFear": false
+    },
+    {
+      "name": "bookkeeping-reaction-fear",
+      "inspectorOwnsStructuredFear": true
+    },
+    {
+      "name": "prepared-move-preserved",
+      "preparedMovePreserved": true
+    },
+    {
+      "name": "granted-spotlight-preserved",
+      "grantConsumed": false
+    },
+    {
+      "name": "reaction-undo",
+      "gmMoveDelta": 0,
+      "adversarySpotlightDelta": 0,
+      "refundsInspectorFearOnly": true
+    },
+    {
+      "name": "ordinary-adversary-action-regression",
+      "gmMoveDelta": 1,
+      "adversarySpotlightDelta": 1
+    },
+    {
+      "name": "environment-action-regression",
+      "gmMoveDelta": 1,
+      "adversarySpotlightDelta": 0
+    },
+    {
+      "name": "explicit-no-spotlight-action",
+      "usesGmMove": false,
+      "usesAdversarySpotlight": false
+    },
+    {
+      "name": "reaction-ledger-persistence",
+      "schema": 13
+    }
+  ],
+  "combatStateHud": [
+    {
+      "name": "native-hp-reversed-track",
+      "value": 1,
+      "max": 4,
+      "isReversed": true,
+      "remaining": 3,
+      "marked": 1
+    },
+    {
+      "name": "native-stress-full",
+      "value": 3,
+      "max": 3,
+      "isReversed": true,
+      "full": true
+    },
+    {
+      "name": "native-thresholds",
+      "major": 8,
+      "severe": 14,
+      "displayOnly": true
+    },
+    {
+      "name": "unknown-active-effect-display",
+      "shown": true,
+      "clearable": false
+    },
+    {
+      "name": "vulnerable-condition-clear",
+      "usesGmMove": true,
+      "adversarySpotlightDelta": 1
+    },
+    {
+      "name": "condition-clear-prepared-move",
+      "additionalMoveFear": 0
+    },
+    {
+      "name": "condition-clear-granted-spotlight",
+      "gmMoveDelta": 0,
+      "spotlightDeltaAtUse": 0
+    },
+    {
+      "name": "hidden-direct-remove",
+      "gmMoveDelta": 0,
+      "fearDelta": 0,
+      "spotlightDelta": 0
+    },
+    {
+      "name": "defeated-adversary",
+      "actionEnabled": false,
+      "reactionEnabled": false,
+      "newSpotlightEnabled": false
+    },
+    {
+      "name": "full-stress-vulnerable-advisory",
+      "autoCreatesEffect": false
+    },
+    {
+      "name": "source-effect-display",
+      "sourceShownWhenResolvable": true
+    },
+    {
+      "name": "effect-hooks-refresh",
+      "createUpdateDelete": true
+    }
+  ],
+  "compatibility": [
+    {
+      "name": "explicit-precedence",
+      "expectedBucket": "explicit"
+    },
+    {
+      "name": "native-fallback",
+      "expectedBucket": "native"
+    },
+    {
+      "name": "sidecar-fallback",
+      "expectedBucket": "sidecar"
+    },
+    {
+      "name": "action-type-conflict",
+      "expectedBucket": "ambiguous"
+    },
+    {
+      "name": "fear-cost-conflict",
+      "expectedBucket": "ambiguous"
+    },
+    {
+      "name": "insufficient-metadata",
+      "expectedBucket": "unknown"
+    },
+    {
+      "name": "spotlight-limit-explicit",
+      "expectedSource": "CYBERMANCY"
+    },
+    {
+      "name": "spotlight-limit-native",
+      "expectedSource": "NATIVE"
+    },
+    {
+      "name": "spotlight-limit-sidecar",
+      "expectedSource": "SIDECAR"
+    },
+    {
+      "name": "spotlight-limit-default",
+      "expectedSource": "DEFAULT",
+      "limit": 1
+    },
+    {
+      "name": "diagnostics-toggle-presentation-only",
+      "persists": false
+    },
+    {
+      "name": "compatibility-report-scene-inventory",
+      "issuesIncludeAmbiguousUnknown": true
+    },
+    {
+      "name": "collapsed-adversary-summary",
+      "showsHpStressDefeated": true
+    },
+    {
+      "name": "collapsed-environment-summary",
+      "showsExecutableActionCount": true
+    },
+    {
+      "name": "no-prose-parsing",
+      "enabled": false
+    }
+  ],
+  "qolUi": [
+    {
+      "name": "visible-name",
+      "title": "Cybermancy GM QOL"
+    },
+    {
+      "name": "canonical-v1-technical-id",
+      "id": "cybermancy-gm-qol"
+    },
+    {
+      "name": "environments-after-adversaries",
+      "expected": true
+    },
+    {
+      "name": "scene-persisted-label-removed",
+      "expected": true
+    },
+    {
+      "name": "diagnostics-toggle-bottom",
+      "expected": true
+    },
+    {
+      "name": "fear-diagnostics-master-gated",
+      "expected": true
+    },
+    {
+      "name": "actor-diagnostics-master-gated",
+      "expected": true
+    },
+    {
+      "name": "armor-unavailable-master-gated",
+      "expected": true
+    },
+    {
+      "name": "combat-state-heading-removed",
+      "expected": true
+    },
+    {
+      "name": "compact-thresholds",
+      "format": "major/severe"
+    },
+    {
+      "name": "fast-play-collapsible",
+      "sessionLocal": true
+    },
+    {
+      "name": "gm-actions-info-tooltip",
+      "expected": true
+    },
+    {
+      "name": "available-grant-focuses-token",
+      "consumesGrant": false
+    },
+    {
+      "name": "no-new-native-writeback",
+      "expected": true
+    },
+    {
+      "name": "schema-unchanged",
+      "schema": 14
+    }
+  ],
+  "qolUiPatch0241": [
+    {
+      "name": "adversary-role-tier-in-collapsed-header",
+      "expected": true
+    },
+    {
+      "name": "adversary-role-tier-no-expanded-duplicate",
+      "expected": true
+    },
+    {
+      "name": "role-tier-font-config-preserved",
+      "usesClass": "cmgi-subtitle"
+    },
+    {
+      "name": "conditions-effects-matches-state-label",
+      "usesClass": "cmgi-state-label"
+    },
+    {
+      "name": "environment-explanatory-text-diagnostics-only",
+      "expected": true
+    },
+    {
+      "name": "schema-unchanged",
+      "schema": 14
+    },
+    {
+      "name": "write-surface-unchanged",
+      "expected": true
+    }
+  ],
+  "qolUiPatch0242": [
+    {
+      "name": "adversary-type-tier-adjacent-to-name",
+      "expected": true
+    },
+    {
+      "name": "recovery-section-removed",
+      "expected": true
+    },
+    {
+      "name": "reset-button-beside-diagnostics",
+      "expected": true
+    },
+    {
+      "name": "reset-semantics-unchanged",
+      "expected": true
+    },
+    {
+      "name": "schema-unchanged",
+      "schema": 14
+    },
+    {
+      "name": "write-surface-unchanged",
+      "expected": true
+    }
+  ],
+  "qolUiPatch0243": [
+    {
+      "name": "bottom-controls-same-row",
+      "expected": true
+    },
+    {
+      "name": "reset-auto-width",
+      "expected": true
+    },
+    {
+      "name": "diagnostics-auto-width",
+      "expected": true
+    },
+    {
+      "name": "schema-unchanged",
+      "schema": 14
+    },
+    {
+      "name": "write-surface-unchanged",
+      "expected": true
+    }
+  ],
+  "directWriteback": [
+    {
+      "name": "fear-twelve-dot-display",
+      "slots": 12
+    },
+    {
+      "name": "fear-empty-dot-gains-one",
+      "delta": 1,
+      "gmMoveDelta": 0,
+      "spotlightDelta": 0
+    },
+    {
+      "name": "fear-no-automatic-gain",
+      "expected": true
+    },
+    {
+      "name": "hp-left-click-decrements-remaining",
+      "delta": -1
+    },
+    {
+      "name": "hp-right-click-increments-remaining",
+      "delta": 1
+    },
+    {
+      "name": "hp-clamped",
+      "min": 0
+    },
+    {
+      "name": "stress-left-click-decrements-marked",
+      "delta": -1
+    },
+    {
+      "name": "stress-right-click-increments-marked",
+      "delta": 1
+    },
+    {
+      "name": "stress-reversed-model-required",
+      "expected": true
+    },
+    {
+      "name": "vulnerable-toggle",
+      "gmMoveDelta": 0,
+      "spotlightDelta": 0
+    },
+    {
+      "name": "restrained-toggle",
+      "gmMoveDelta": 0,
+      "spotlightDelta": 0
+    },
+    {
+      "name": "hidden-toggle",
+      "gmMoveDelta": 0,
+      "spotlightDelta": 0
+    },
+    {
+      "name": "custom-effects-still-display",
+      "expected": true
+    },
+    {
+      "name": "no-inspector-ledger-write",
+      "expected": true
+    },
+    {
+      "name": "schema-unchanged",
+      "schema": 14
+    }
+  ],
+  "qolUiPatch0251": [
+    {
+      "name": "vulnerable-rule-tooltip",
+      "expected": true
+    },
+    {
+      "name": "restrained-rule-tooltip",
+      "expected": true
+    },
+    {
+      "name": "hidden-rule-tooltip",
+      "expected": true
+    },
+    {
+      "name": "compact-spotlight-current-limit",
+      "format": "SPOT current/limit"
+    },
+    {
+      "name": "compact-linked-count",
+      "format": "LINK n"
+    },
+    {
+      "name": "compact-total-count",
+      "format": "TOTAL n"
+    },
+    {
+      "name": "standard-attack-dialog-actor-action",
+      "expected": true
+    },
+    {
+      "name": "standard-attack-dialog-total-fear",
+      "expected": true
+    },
+    {
+      "name": "standard-attack-info-tooltip",
+      "expected": true
+    },
+    {
+      "name": "commit-roll-button-tooltip",
+      "expected": true
+    },
+    {
+      "name": "bookkeeping-only-button-tooltip",
+      "expected": true
+    },
+    {
+      "name": "cancel-button-matched-sizing",
+      "expected": true
+    },
+    {
+      "name": "embedded-feature-dialog-unchanged",
+      "expected": true
+    },
+    {
+      "name": "schema-unchanged",
+      "schema": 14
+    },
+    {
+      "name": "write-surface-unchanged",
+      "expected": true
+    }
+  ],
+  "qolUiPatch0252": [
+    {
+      "name": "transaction-buttons-equal-height",
+      "expected": true
+    },
+    {
+      "name": "transaction-buttons-single-line",
+      "expected": true
+    },
+    {
+      "name": "formatted-info-hover-grid",
+      "expected": true
+    },
+    {
+      "name": "reset-diagnostics-equal-height",
+      "expected": true
+    },
+    {
+      "name": "conditions-label-removed",
+      "expected": true
+    },
+    {
+      "name": "thresholds-adjacent-to-stress",
+      "expected": true
+    },
+    {
+      "name": "conditions-inline-with-state",
+      "expected": true
+    },
+    {
+      "name": "hp-visibly-clickable",
+      "expected": true
+    },
+    {
+      "name": "stress-visibly-clickable",
+      "expected": true
+    },
+    {
+      "name": "custom-effects-retained",
+      "expected": true
+    },
+    {
+      "name": "schema-unchanged",
+      "schema": 14
+    },
+    {
+      "name": "write-surface-unchanged",
+      "expected": true
+    }
+  ],
+  "qolUiPatch0253": [
+    {
+      "name": "standard-dialog-resizable",
+      "expected": true
+    },
+    {
+      "name": "standard-dialog-default-width",
+      "width": 620
+    },
+    {
+      "name": "standard-dialog-default-height",
+      "height": 390
+    },
+    {
+      "name": "adversary-actor-thumbnail",
+      "source": "actor.img"
+    },
+    {
+      "name": "environment-actor-thumbnail",
+      "source": "actor.img"
+    },
+    {
+      "name": "thumbnail-fixed-size",
+      "size": "1.7rem"
+    },
+    {
+      "name": "thumbnail-absolute-position",
+      "expected": true
+    },
+    {
+      "name": "thumbnail-does-not-affect-row-flow",
+      "expected": true
+    },
+    {
+      "name": "schema-unchanged",
+      "schema": 14
+    },
+    {
+      "name": "write-surface-unchanged",
+      "expected": true
+    }
+  ],
+  "qolUiPatch0254": [
+    {
+      "name": "standard-dialog-default-height",
+      "height": 300
+    },
+    {
+      "name": "standard-dialog-remains-resizable",
+      "expected": true
+    },
+    {
+      "name": "commit-roll-hover-summary",
+      "expected": true
+    },
+    {
+      "name": "bookkeeping-hover-summary",
+      "expected": true
+    },
+    {
+      "name": "cancel-hover-summary",
+      "expected": true
+    },
+    {
+      "name": "schema-unchanged",
+      "schema": 14
+    },
+    {
+      "name": "write-surface-unchanged",
+      "expected": true
+    }
+  ],
+  "pcRoster": [
+    {
+      "name": "scene-character-only",
+      "expected": true
+    },
+    {
+      "name": "linked-pc-deduplicated",
+      "expected": true
+    },
+    {
+      "name": "unlinked-pc-token-distinct",
+      "expected": true
+    },
+    {
+      "name": "pc-section-before-adversaries",
+      "expected": true
+    },
+    {
+      "name": "pc-thumbnail",
+      "source": "actor.img"
+    },
+    {
+      "name": "pc-hp-left-right-edit",
+      "expected": true
+    },
+    {
+      "name": "pc-stress-left-right-edit",
+      "expected": true
+    },
+    {
+      "name": "pc-armor-readonly-if-available",
+      "resource": "native armor slots"
+    },
+    {
+      "name": "pc-thresholds-readonly",
+      "expected": true
+    },
+    {
+      "name": "pc-vulnerable-toggle",
+      "expected": true
+    },
+    {
+      "name": "pc-restrained-toggle",
+      "expected": true
+    },
+    {
+      "name": "pc-hidden-toggle",
+      "expected": true
+    },
+    {
+      "name": "pc-write-no-gm-move",
+      "delta": 0
+    },
+    {
+      "name": "pc-write-no-spotlight",
+      "delta": 0
+    },
+    {
+      "name": "pc-write-no-fear",
+      "delta": 0
+    },
+    {
+      "name": "pc-native-hook-refresh",
+      "expected": true
+    }
+  ],
+  "transactionDialogs026": [
+    {
+      "name": "standard-attack-dialog-regression",
+      "expected": true
+    },
+    {
+      "name": "embedded-action-compact",
+      "expected": true
+    },
+    {
+      "name": "environment-action-compact",
+      "expected": true
+    },
+    {
+      "name": "reaction-compact",
+      "expected": true
+    },
+    {
+      "name": "environment-reaction-compact",
+      "expected": true
+    },
+    {
+      "name": "compact-dialog-size",
+      "size": "620x300"
+    },
+    {
+      "name": "compact-dialog-resizable",
+      "expected": true
+    },
+    {
+      "name": "formatted-info-hover",
+      "expected": true
+    },
+    {
+      "name": "button-tooltips",
+      "expected": true
+    },
+    {
+      "name": "native-unavailable-primary-disabled",
+      "expected": true
+    },
+    {
+      "name": "bookkeeping-fallback-retained",
+      "expected": true
+    },
+    {
+      "name": "schema-unchanged",
+      "schema": 14
+    }
+  ],
+  "qolUiPatch0261": [
+    {
+      "name": "pc-armor-slots-native-resource",
+      "expected": true
+    },
+    {
+      "name": "pc-armor-slots-right-of-stress",
+      "expected": true
+    },
+    {
+      "name": "pc-armor-slots-remaining-max",
+      "format": "remaining/max"
+    },
+    {
+      "name": "pc-armor-score-not-used-as-slot-readout",
+      "expected": true
+    },
+    {
+      "name": "pc-section-collapsible",
+      "expected": true
+    },
+    {
+      "name": "pc-section-default-expanded",
+      "expected": true
+    },
+    {
+      "name": "pc-section-collapse-session-only",
+      "expected": true
+    },
+    {
+      "name": "pc-rows-not-individually-collapsible",
+      "expected": true
+    },
+    {
+      "name": "schema-unchanged",
+      "schema": 14
+    },
+    {
+      "name": "write-surface-unchanged",
+      "expected": true
+    }
+  ],
+  "qolPatch0262": [
+    {
+      "name": "pc-armor-refresh-on-create-item",
+      "expected": true
+    },
+    {
+      "name": "pc-armor-refresh-on-update-item",
+      "expected": true
+    },
+    {
+      "name": "pc-armor-refresh-on-delete-item",
+      "expected": true
+    },
+    {
+      "name": "pc-actor-refresh-retained",
+      "expected": true
+    },
+    {
+      "name": "pc-section-toggle-left-aligned",
+      "expected": true
+    },
+    {
+      "name": "fast-play-toggle-left-aligned",
+      "expected": true
+    },
+    {
+      "name": "schema-unchanged",
+      "schema": 14
+    },
+    {
+      "name": "write-surface-unchanged",
+      "expected": true
+    }
+  ],
+  "qolPatch0263": [
+    {
+      "name": "pc-name-clickable",
+      "expected": true
+    },
+    {
+      "name": "pc-name-uses-focus-token",
+      "expected": true
+    },
+    {
+      "name": "pc-name-exact-token-id",
+      "expected": true
+    },
+    {
+      "name": "pc-name-selected-visual",
+      "expected": true
+    },
+    {
+      "name": "pc-focus-selects-token",
+      "expected": true
+    },
+    {
+      "name": "pc-focus-pans-to-token",
+      "expected": true
+    },
+    {
+      "name": "schema-unchanged",
+      "schema": 14
+    },
+    {
+      "name": "write-surface-unchanged",
+      "expected": true
+    }
+  ],
+  "releaseCandidateRc1": [
+    {
+      "name": "version-rc1",
+      "version": "1.0.0-rc1"
+    },
+    {
+      "name": "schema-frozen",
+      "schema": 14
+    },
+    {
+      "name": "legacy-snapshot-parser-retained",
+      "expected": true
+    },
+    {
+      "name": "scene-change-guard-adversary-action",
+      "expected": true
+    },
+    {
+      "name": "scene-change-guard-environment-action",
+      "expected": true
+    },
+    {
+      "name": "scene-change-guard-reaction",
+      "expected": true
+    },
+    {
+      "name": "pc-write-no-gm-move",
+      "expected": true
+    },
+    {
+      "name": "pc-write-no-spotlight",
+      "expected": true
+    },
+    {
+      "name": "pc-write-no-fear",
+      "expected": true
+    },
+    {
+      "name": "reaction-no-gm-move",
+      "expected": true
+    },
+    {
+      "name": "reaction-no-spotlight",
+      "expected": true
+    },
+    {
+      "name": "environment-action-no-adversary-spotlight",
+      "expected": true
+    },
+    {
+      "name": "standard-attack-compact-path-retained",
+      "expected": true
+    },
+    {
+      "name": "legacy-action-renderer-removed",
+      "expected": true
+    },
+    {
+      "name": "legacy-environment-renderer-removed",
+      "expected": true
+    },
+    {
+      "name": "legacy-reaction-renderer-removed",
+      "expected": true
+    },
+    {
+      "name": "rc-diagnostic-snapshot",
+      "expected": true
+    },
+    {
+      "name": "compatibility-buckets-retained",
+      "expected": true
+    },
+    {
+      "name": "spotlight-integrity-visible",
+      "expected": true
+    },
+    {
+      "name": "write-surface-frozen",
+      "expected": true
+    }
+  ],
+  "releaseCandidateRc2": [
+    {
+      "name": "manual-fear-gain-retained",
+      "expected": true
+    },
+    {
+      "name": "manual-fear-spend-enabled",
+      "expected": true
+    },
+    {
+      "name": "manual-fear-spend-exactly-one",
+      "delta": -1
+    },
+    {
+      "name": "manual-fear-spend-native-only",
+      "expected": true
+    },
+    {
+      "name": "manual-fear-spend-no-gm-move",
+      "delta": 0
+    },
+    {
+      "name": "manual-fear-spend-no-spotlight",
+      "delta": 0
+    },
+    {
+      "name": "manual-fear-spend-no-grant",
+      "delta": 0
+    },
+    {
+      "name": "manual-fear-spend-no-action-ledger",
+      "delta": 0
+    },
+    {
+      "name": "manual-fear-spend-disabled-during-transactions",
+      "expected": true
+    },
+    {
+      "name": "pc-evasion-native-read",
+      "path": "system.evasion"
+    },
+    {
+      "name": "pc-evasion-right-of-thresholds",
+      "expected": true
+    },
+    {
+      "name": "pc-evasion-readonly",
+      "expected": true
+    },
+    {
+      "name": "rc-diagnostics-include-evasion",
+      "expected": true
+    },
+    {
+      "name": "schema-unchanged",
+      "schema": 14
+    },
+    {
+      "name": "write-surface-unchanged",
+      "expected": true
+    }
+  ],
+  "releaseCandidateRc3": [
+    {
+      "name": "pc-evasion-returned-from-pc-state",
+      "expected": true
+    },
+    {
+      "name": "adversary-state-has-no-undeclared-evasion",
+      "expected": true
+    },
+    {
+      "name": "pc-evasion-render-optional-safe",
+      "expected": true
+    },
+    {
+      "name": "pc-row-renders-without-evasion-field",
+      "expected": true
+    },
+    {
+      "name": "manual-fear-spend-retained",
+      "expected": true
+    },
+    {
+      "name": "pc-evasion-display-retained",
+      "expected": true
+    },
+    {
+      "name": "schema-unchanged",
+      "schema": 14
+    },
+    {
+      "name": "write-surface-unchanged",
+      "expected": true
+    }
+  ],
+  "v1Release": [
+    {
+      "name": "canonical-module-id",
+      "id": "cybermancy-gm-qol"
+    },
+    {
+      "name": "legacy-module-id",
+      "id": "cybermancy-gm-inspector"
+    },
+    {
+      "name": "game.cybermancyGMQOL"
+    },
+    {
+      "name": "game.cybermancyGMInspector"
+    },
+    {
+      "name": "cybermancyGMQOL"
+    },
+    {
+      "name": "current-flag-preferred",
+      "expected": true
+    },
+    {
+      "name": "legacy-flag-fallback",
+      "expected": true
+    },
+    {
+      "name": "legacy-flag-migrated-to-current",
+      "expected": true
+    },
+    {
+      "name": "legacy-flag-cleared-after-migration",
+      "expected": true
+    },
+    {
+      "name": "reset-clears-current-and-legacy",
+      "expected": true
+    },
+    {
+      "name": "schema-unchanged",
+      "schema": 14
+    },
+    {
+      "name": "runtime-diagnostic-canonical",
+      "expected": true
+    },
+    {
+      "name": "rc-diagnostic-api-alias-retained",
+      "expected": true
+    },
+    {
+      "name": "cybermancy-gm-qol"
+    },
+    {
+      "name": "visible-brand",
+      "title": "Cybermancy GM QOL"
+    }
+  ],
+  "v101LegacyScopeHotfix": [
+    {
+      "name": "legacy-getFlag-never-called",
+      "expected": true
+    },
+    {
+      "name": "legacy-unsetFlag-never-called",
+      "expected": true
+    },
+    {
+      "name": "legacy-state-raw-read",
+      "expected": true
+    },
+    {
+      "name": "canonical-getFlag-retained",
+      "expected": true
+    },
+    {
+      "name": "migration-tombstone-canonical",
+      "expected": true
+    },
+    {
+      "name": "reset-marker-before-unset",
+      "expected": true
+    },
+    {
+      "name": "legacy-resurrection-blocked",
+      "expected": true
+    },
+    {
+      "name": "diagnostics-safe-with-old-module-disabled",
+      "expected": true
+    },
+    {
+      "name": "schema-unchanged",
+      "schema": 14
+    }
+  ]
+}

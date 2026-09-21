@@ -1,0 +1,26 @@
+{
+  "id": "cybermancy-gm-qol",
+  "title": "Cybermancy GM QOL",
+  "description": "Cybermancy GM QOL v1.0.1: fixes Reset and Diagnostics after the v1 package rename by avoiding Foundry flag API calls through the inactive pre-v1 package scope.",
+  "version": "1.0.1",
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13"
+  },
+  "authors": [
+    {
+      "name": "Dan Weaver"
+    }
+  ],
+  "relationships": {
+    "systems": [
+      {
+        "id": "daggerheart",
+        "type": "system"
+      }
+    ]
+  },
+  "esmodules": [
+    "scripts/main.js"
+  ]
+}
