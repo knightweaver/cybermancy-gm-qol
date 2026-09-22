@@ -9,6 +9,6 @@
     "daggerheartMajor": "1",
     "daggerheartSupportedRange": "1.2-1.9"
   },
-  "publicationRevision": 2,
+  "publicationRevision": 3,
   "purpose": "Memorable infrastructure-compatibility alias for the final pre-migration Foundry 13 / Daggerheart 1.x baseline."
 }
