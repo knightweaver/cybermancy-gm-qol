@@ -1,0 +1,22 @@
+{
+  "version": "1.0.1",
+  "tag": "v1.0.1",
+  "publish": true,
+  "qualifiedWorkflowRunId": 35747874561,
+  "qualifiedArtifactName": "cybermancy-gm-qol-runtime-candidate-v1.0.1",
+  "qualifiedRuntimeSha256": "c31637ef169d191215995e4ca5da7aa6fec28ab551d4c417081f8fa838d9637a",
+  "runtime": {
+    "foundryCore": "13",
+    "system": "daggerheart",
+    "systemVersions": [
+      "1.2.x",
+      "1.9.x"
+    ]
+  },
+  "qualification": {
+    "status": "PASS",
+    "method": "Manual clean-install qualification at both supported Daggerheart range boundaries",
+    "result": "The exact runtime candidate from workflow run 35747874561 installed and passed clean-install qualification on Foundry 13 with Daggerheart 1.2.x and again with Daggerheart 1.9.x.",
+    "qualifiedAt": "2026-09-22"
+  }
+}
