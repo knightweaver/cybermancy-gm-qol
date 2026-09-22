@@ -58,34 +58,26 @@ jobs:
       - name: Verify canonical release and exact qualified runtime
         shell: bash
         run: |
-          ALIAS="${{ steps.control.outputs.alias_tag }}"
           CANONICAL="${{ steps.control.outputs.canonical_tag }}"
           ARCHIVE="${{ steps.control.outputs.runtime_asset }}"
           EXPECTED="${{ steps.control.outputs.runtime_sha256 }}"
 
           test "$(sha256sum "alias-assets/$ARCHIVE" | awk '{print $1}')" = "$EXPECTED"
-
           git fetch --force --tags
           CANONICAL_COMMIT="$(git rev-list -n 1 "$CANONICAL")"
           test -n "$CANONICAL_COMMIT"
-
-          TARGET="$(gh release view "$CANONICAL" --json targetCommitish --jq .targetCommitish)"
-          if [[ "$TARGET" =~ ^[0-9a-f]{40}$ ]]; then
-            test "$TARGET" = "$CANONICAL_COMMIT"
-          fi
-
           printf '%s\n' "$CANONICAL_COMMIT" > canonical-commit.txt
 
           ARCHIVE="$ARCHIVE" python - <<'PY'
           import os
           from pathlib import Path
-          expected = {"module.json", "SHA256SUMS.txt", os.environ["ARCHIVE"]}
-          actual = {p.name for p in Path("alias-assets").iterdir() if p.is_file()}
+          expected={"module.json","SHA256SUMS.txt",os.environ["ARCHIVE"]}
+          actual={p.name for p in Path("alias-assets").iterdir() if p.is_file()}
           if actual != expected:
               raise SystemExit(f"Canonical asset set mismatch: {sorted(actual)}")
           PY
 
-      - name: Create compatibility alias release
+      - name: Create or refresh compatibility alias release
         shell: bash
         run: |
           ALIAS="${{ steps.control.outputs.alias_tag }}"
@@ -93,33 +85,45 @@ jobs:
           TITLE="${{ steps.control.outputs.title }}"
           COMMIT="$(cat canonical-commit.txt)"
 
-          cat > alias-notes.md <<EOF
-          # Cybermancy GM QOL compatibility alias: $ALIAS
+          ALIAS="$ALIAS" CANONICAL="$CANONICAL" COMMIT="$COMMIT" python - <<'PY'
+          import os
+          from pathlib import Path
+          alias=os.environ["ALIAS"]
+          canonical=os.environ["CANONICAL"]
+          commit=os.environ["COMMIT"]
+          body=f"""# Cybermancy GM QOL compatibility alias: {alias}
 
-          This is a compatibility-oriented alias of **$CANONICAL**.
+          This is a compatibility-oriented alias of **{canonical}**.
 
           - Foundry VTT: **13**
           - Daggerheart: **1.x**
           - Supported Daggerheart range: **1.2 through 1.9**
-          - Canonical semantic release: **$CANONICAL**
-          - Target commit: `$COMMIT`
+          - Canonical semantic release: **{canonical}**
+          - Target commit: `{commit}`
 
           The runtime ZIP, `module.json`, and `SHA256SUMS.txt` attached here are copied byte-for-byte from the canonical qualified release. No rebuild or code change is associated with this alias.
 
           Use the semantic release for ordinary version tracking; use this alias when you want a memorable URL identifying the supported Foundry/Daggerheart infrastructure generation.
-          EOF
+          """
+          Path("alias-notes.md").write_text(body, encoding="utf-8")
+          PY
 
           if gh release view "$ALIAS" >/dev/null 2>&1; then
-            echo "Compatibility alias release $ALIAS already exists; refusing to replace it."
-            exit 1
+            EXISTING_TARGET="$(gh release view "$ALIAS" --json targetCommitish --jq .targetCommitish)"
+            test "$EXISTING_TARGET" = "$COMMIT"
+            gh release upload "$ALIAS" alias-assets/* --clobber
+            gh release edit "$ALIAS" \
+              --title "$TITLE" \
+              --notes-file alias-notes.md \
+              --latest=false
+          else
+            gh release create "$ALIAS" \
+              alias-assets/* \
+              --target "$COMMIT" \
+              --title "$TITLE" \
+              --notes-file alias-notes.md \
+              --latest=false
           fi
-
-          gh release create "$ALIAS" \
-            alias-assets/* \
-            --target "$COMMIT" \
-            --title "$TITLE" \
-            --notes-file alias-notes.md \
-            --latest=false
 
       - name: Verify alias identity, assets, and latest-release stability
         shell: bash
@@ -135,27 +139,27 @@ jobs:
             > alias-release.json
 
           ALIAS="$ALIAS" ARCHIVE="$ARCHIVE" COMMIT="$COMMIT" python - <<'PY'
-          import json, os, subprocess
+          import json, os
           data=json.load(open("alias-release.json"))
           if data["tagName"] != os.environ["ALIAS"]:
               raise SystemExit("Alias tag mismatch")
           if data["isDraft"] or data["isPrerelease"]:
               raise SystemExit("Alias release must be published and non-prerelease")
+          if data["targetCommitish"] != os.environ["COMMIT"]:
+              raise SystemExit(f"Alias release target mismatch: {data['targetCommitish']}")
           names=sorted(a["name"] for a in data["assets"])
-          expected_names=sorted([os.environ["ARCHIVE"], "module.json", "SHA256SUMS.txt"])
+          expected_names=sorted([os.environ["ARCHIVE"],"module.json","SHA256SUMS.txt"])
           if names != expected_names:
               raise SystemExit(f"Alias assets mismatch: {names}")
-          tag_commit=subprocess.check_output(
-              ["git", "rev-list", "-n", "1", os.environ["ALIAS"]],
-              text=True,
-          ).strip()
-          if tag_commit != os.environ["COMMIT"]:
-              raise SystemExit(f"Alias tag targets {tag_commit}, expected {os.environ['COMMIT']}")
           PY
+
+          TAG_COMMIT="$(gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$ALIAS" --jq .object.sha)"
+          test "$TAG_COMMIT" = "$COMMIT"
 
           LATEST="$(gh api "repos/$GITHUB_REPOSITORY/releases/latest" --jq .tag_name)"
           test "$LATEST" = "$CANONICAL"
 
+          rm -rf alias-verify
           mkdir -p alias-verify
           gh release download "$ALIAS" --dir alias-verify --pattern "$ARCHIVE"
           test "$(sha256sum "alias-verify/$ARCHIVE" | awk '{print $1}')" = "$EXPECTED"
