@@ -111,6 +111,15 @@ jobs:
           if gh release view "$ALIAS" >/dev/null 2>&1; then
             EXISTING_TARGET="$(gh release view "$ALIAS" --json targetCommitish --jq .targetCommitish)"
             test "$EXISTING_TARGET" = "$COMMIT"
+
+            EXISTING_ASSETS="$(gh release view "$ALIAS" --json assets --jq '.assets[].name')"
+            for FILE in alias-assets/*; do
+              NAME="$(basename "$FILE")"
+              if ! grep -Fxq "$NAME" <<< "$EXISTING_ASSETS"; then
+                gh release upload "$ALIAS" "$FILE"
+              fi
+            done
+
             gh release edit "$ALIAS" \
               --title "$TITLE" \
               --notes-file alias-notes.md \
@@ -160,5 +169,15 @@ jobs:
 
           rm -rf alias-verify
           mkdir -p alias-verify
-          gh release download "$ALIAS" --dir alias-verify --pattern "$ARCHIVE"
+          gh release download "$ALIAS" \
+            --dir alias-verify \
+            --pattern "$ARCHIVE" \
+            --pattern "module.json" \
+            --pattern "SHA256SUMS.txt"
+
+          for FILE in alias-assets/*; do
+            NAME="$(basename "$FILE")"
+            cmp "$FILE" "alias-verify/$NAME"
+          done
+
           test "$(sha256sum "alias-verify/$ARCHIVE" | awk '{print $1}')" = "$EXPECTED"
