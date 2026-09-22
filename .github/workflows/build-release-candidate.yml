@@ -1,0 +1,83 @@
+name: Build Cybermancy GM QOL Release Candidate
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "module.json"
+      - "README.md"
+      - "scripts/**"
+      - "tests/**"
+      - "tools/build-bundle.mjs"
+      - "tools/validate-build.mjs"
+      - "tools/validate-release.mjs"
+      - "tools/validate-release-manifest.mjs"
+      - "tools/build-runtime-package.py"
+      - ".github/workflows/build-release-candidate.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: cybermancy-gm-qol-release-candidate
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  build-candidate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Read module version
+        id: version
+        run: |
+          VERSION="$(node -p "require('./module.json').version")"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Rebuild generated runtime bundle
+        run: node tools/build-bundle.mjs
+
+      - name: Require committed bundle to be current
+        run: git diff --exit-code -- scripts/bundle.js
+
+      - name: Run source regression validation
+        run: node tools/validate-build.mjs
+
+      - name: Run release write-surface validation
+        run: node tools/validate-release.mjs
+
+      - name: Validate Foundry install manifest
+        run: node tools/validate-release-manifest.mjs
+
+      - name: Build deterministic runtime candidate
+        run: python tools/build-runtime-package.py --repo .
+
+      - name: Inspect package contents
+        run: |
+          python - <<'PY'
+          import json, zipfile
+          from pathlib import Path
+          manifest=json.load(open("module.json"))
+          archive=Path("release") / f"cybermancy-gm-qol-v{manifest['version']}.zip"
+          with zipfile.ZipFile(archive) as zf:
+              names=zf.namelist()
+          expected=["README.md","module.json","scripts/bundle.js","scripts/main.js"]
+          if sorted(names) != sorted(expected):
+              raise SystemExit(f"Unexpected runtime members: {names}")
+          print("\n".join(names))
+          PY
+
+      - name: Upload runtime qualification candidate
+        uses: actions/upload-artifact@v4
+        with:
+          name: cybermancy-gm-qol-runtime-candidate-v${{ steps.version.outputs.version }}
+          path: |
+            release/cybermancy-gm-qol-v${{ steps.version.outputs.version }}.zip
+            build/release/runtime-package.json
+          if-no-files-found: error
+          retention-days: 30

@@ -1,0 +1,127 @@
+name: Publish Cybermancy GM QOL Release
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "release-control/*.json"
+  workflow_dispatch:
+    inputs:
+      control:
+        description: "Release-control file"
+        required: true
+        default: "release-control/v1.0.1.json"
+
+concurrency:
+  group: cybermancy-gm-qol-release
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      RELEASE_CONTROL: ${{ github.event.inputs.control || 'release-control/v1.0.1.json' }}
+      GH_TOKEN: ${{ github.token }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Read release control
+        id: control
+        shell: bash
+        run: |
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          import json, os
+          data=json.load(open(os.environ["RELEASE_CONTROL"]))
+          print(f"version={data['version']}")
+          print(f"tag={data['tag']}")
+          print(f"archive=cybermancy-gm-qol-v{data['version']}.zip")
+          print(f"qualified_run_id={data['qualifiedWorkflowRunId']}")
+          print(f"qualified_artifact={data['qualifiedArtifactName']}")
+          print(f"notes=RELEASE-NOTES-{data['tag']}.md")
+          PY
+
+      - name: Require version-specific release notes
+        run: test -f "${{ steps.control.outputs.notes }}"
+
+      - name: Rebuild and validate runtime
+        run: |
+          node tools/build-bundle.mjs
+          git diff --exit-code -- scripts/bundle.js
+          node tools/validate-build.mjs
+          node tools/validate-release.mjs
+          node tools/validate-release-manifest.mjs
+          python tools/build-runtime-package.py --repo .
+          mv "release/${{ steps.control.outputs.archive }}"              "release/cybermancy-gm-qol-v${{ steps.control.outputs.version }}-rebuilt.zip"
+
+      - name: Download exact qualified candidate
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ steps.control.outputs.qualified_artifact }}
+          path: qualified-runtime
+          github-token: ${{ github.token }}
+          run-id: ${{ steps.control.outputs.qualified_run_id }}
+
+      - name: Prove rebuilt runtime equivalence
+        run: |
+          python tools/compare-runtime-packages.py             --repo .             --qualified "qualified-runtime/release/${{ steps.control.outputs.archive }}"             --rebuilt "release/cybermancy-gm-qol-v${{ steps.control.outputs.version }}-rebuilt.zip"
+
+      - name: Stage exact qualified runtime for publication
+        run: |
+          cp "qualified-runtime/release/${{ steps.control.outputs.archive }}"              "release/${{ steps.control.outputs.archive }}"
+
+      - name: Enforce release gates
+        run: |
+          python tools/prepare-release.py             --repo .             --control "$RELEASE_CONTROL"
+
+      - name: Publish or refresh GitHub release
+        shell: bash
+        run: |
+          TAG="${{ steps.control.outputs.tag }}"
+          ARCHIVE="${{ steps.control.outputs.archive }}"
+          NOTES="${{ steps.control.outputs.notes }}"
+
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG"               "release/$ARCHIVE"               "release/module.json"               "release/SHA256SUMS.txt"               --clobber
+            gh release edit "$TAG"               --title "Cybermancy GM QOL $TAG"               --notes-file "$NOTES"
+          else
+            gh release create "$TAG"               "release/$ARCHIVE"               "release/module.json"               "release/SHA256SUMS.txt"               --target "$GITHUB_SHA"               --title "Cybermancy GM QOL $TAG"               --notes-file "$NOTES"
+          fi
+
+      - name: Verify published release assets
+        shell: bash
+        run: |
+          TAG="${{ steps.control.outputs.tag }}"
+          ARCHIVE="${{ steps.control.outputs.archive }}"
+          gh release view "$TAG" --json tagName,isDraft,isPrerelease,url,assets > published-release.json
+
+          ARCHIVE="$ARCHIVE" python - <<'PY'
+          import json, os
+          data=json.load(open("published-release.json"))
+          names=sorted(a["name"] for a in data["assets"])
+          expected=sorted([os.environ["ARCHIVE"],"module.json","SHA256SUMS.txt"])
+          if data["isDraft"] or data["isPrerelease"]:
+              raise SystemExit("Release must be published and non-prerelease")
+          if names != expected:
+              raise SystemExit(f"Release assets mismatch: {names}")
+          print(json.dumps(data,indent=2))
+          PY
+
+      - name: Upload release evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: cybermancy-gm-qol-${{ steps.control.outputs.tag }}-release-evidence
+          path: |
+            build/release/
+            release/SHA256SUMS.txt
+            published-release.json
+          if-no-files-found: error
+          retention-days: 90

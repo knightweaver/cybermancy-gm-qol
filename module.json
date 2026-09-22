@@ -1,26 +1,38 @@
 {
+  "type": "module",
   "id": "cybermancy-gm-qol",
   "title": "Cybermancy GM QOL",
-  "description": "Cybermancy GM QOL v1.0.1: fixes Reset and Diagnostics after the v1 package rename by avoiding Foundry flag API calls through the inactive pre-v1 package scope.",
+  "description": "GM quality-of-life tools for Cybermancy and Daggerheart, including Spotlight/Fear bookkeeping, adversary and environment actions, and native combat-state synchronization.",
   "version": "1.0.1",
   "compatibility": {
     "minimum": "13",
-    "verified": "13"
+    "verified": "13",
+    "maximum": "13"
   },
   "authors": [
     {
-      "name": "Dan Weaver"
+      "name": "Dan Weaver",
+      "url": "https://github.com/knightweaver"
     }
   ],
   "relationships": {
     "systems": [
       {
         "id": "daggerheart",
-        "type": "system"
+        "type": "system",
+        "compatibility": {
+          "minimum": "1.2",
+          "verified": "1.9",
+          "maximum": "1.9"
+        }
       }
     ]
   },
   "esmodules": [
     "scripts/main.js"
-  ]
+  ],
+  "url": "https://github.com/knightweaver/cybermancy-gm-qol",
+  "manifest": "https://github.com/knightweaver/cybermancy-gm-qol/releases/latest/download/module.json",
+  "download": "https://github.com/knightweaver/cybermancy-gm-qol/releases/download/v1.0.1/cybermancy-gm-qol-v1.0.1.zip",
+  "readme": "README.md"
 }
