@@ -111,7 +111,6 @@ jobs:
           if gh release view "$ALIAS" >/dev/null 2>&1; then
             EXISTING_TARGET="$(gh release view "$ALIAS" --json targetCommitish --jq .targetCommitish)"
             test "$EXISTING_TARGET" = "$COMMIT"
-            gh release upload "$ALIAS" alias-assets/* --clobber
             gh release edit "$ALIAS" \
               --title "$TITLE" \
               --notes-file alias-notes.md \
