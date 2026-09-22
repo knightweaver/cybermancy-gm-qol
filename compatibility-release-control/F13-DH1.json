@@ -1,0 +1,13 @@
+{
+  "aliasTag": "F13-DH1",
+  "canonicalTag": "v1.0.1",
+  "title": "Cybermancy GM QOL F13-DH1",
+  "runtimeAsset": "cybermancy-gm-qol-v1.0.1.zip",
+  "qualifiedRuntimeSha256": "c31637ef169d191215995e4ca5da7aa6fec28ab551d4c417081f8fa838d9637a",
+  "compatibility": {
+    "foundry": "13",
+    "daggerheartMajor": "1",
+    "daggerheartSupportedRange": "1.2-1.9"
+  },
+  "purpose": "Memorable infrastructure-compatibility alias for the final pre-migration Foundry 13 / Daggerheart 1.x baseline."
+}
